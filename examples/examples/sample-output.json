@@ -1,0 +1,21 @@
+{
+  "lane_1_lead_outreach": {
+    "status": "approved_for_send",
+    "lead_score": 86,
+    "qualification": "HOT",
+    "personalized_outreach_generated": true,
+    "human_approval_required": true,
+    "crm_updated": true
+  },
+  "lane_2_lead_appointment": {
+    "qualification": "qualified",
+    "appointment_status": "booked",
+    "crm_updated": true
+  },
+  "lane_3_appointment_revenue": {
+    "proposal_generated": true,
+    "price_source": "deterministic_business_logic",
+    "human_approval_required": true,
+    "revenue_stage": "pending_customer_decision"
+  }
+}
