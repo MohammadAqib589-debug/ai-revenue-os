@@ -1,14 +1,344 @@
-# ai-revenue-os
-AI-powered revenue automation system built with n8n for lead research, qualification, outreach, appointment booking, and revenue workflows.
+# AI Revenue OS
 
-Overview Many sales processes require repetitive manual work: Researching prospects Evaluating lead quality Writing personalized outreach Managing follow-ups Handling appointment workflows Moving prospects through revenue stages AI Revenue OS connects these processes into an automation architecture built with n8n, AI models, APIs, Gmail, and structured workflow logic. 
-The system is designed to combine AI reasoning with deterministic automation rather than relying on AI for every decision. The Three Revenue Lanes Lane 1 — Lead → Outreach The first lane transforms a raw lead into personalized outreach. Lead ↓ Validate ↓ Research ↓ AI Scoring ↓ Save Lead ↓ Generate Personalized Outreach ↓ Human Approval ↓ Gmail ↓ Update CRM Key capabilities Lead validation Prospect research AI lead scoring Structured AI output Personalized outreach generation Human approval checkpoint Automated email delivery CRM/status update Lane 2 — Lead → Appointment The second lane focuses on moving a qualified lead toward an appointment. Lead ↓ Qualification ↓ Appointment Workflow ↓ Scheduling ↓ Confirmation ↓ Appointment This separates appointment-related automation from the initial outreach process. The architecture can be adapted to different scheduling and qualification requirements. Lane 3 — Appointment → Revenue The third lane begins after an appointment and focuses on the next stage of the revenue process. Appointment ↓ Revenue Workflow ↓ Status / Event Tracking ↓ Revenue Stage This allows the system to extend beyond simple lead generation and connect appointment activity with downstream revenue operations. Architecture The system is composed of separate workflow lanes rather than one oversized automation. ┌───────────────┐ │ Lead │ └───────┬───────┘ │ ┌───────────────┼───────────────┐ ▼ ▼ ▼ LEAD → OUTREACH LEAD → APPOINTMENT APPOINTMENT │ │ → REVENUE │ │ │ ▼ ▼ ▼ Research Qualification Revenue │ │ Process ▼ ▼ │ AI Score Scheduling ▼ │ │ Tracking ▼ ▼ AI Outreach Appointment │ ▼ Human Approval │ ▼ Gmail │ ▼ Status Update Lead → Outreach Workflow The outreach workflow uses a staged process:
+### AI-Powered Lead-to-Revenue Automation System
 
-Validate Incoming lead information is checked before processing.
-Research Relevant prospect information is collected for personalization.
-AI Scoring An AI model evaluates the lead and produces structured scoring information.
-Save Lead information and qualification results are stored.
-Outreach Generation AI generates personalized outreach based on the available prospect context.
-Human Approval A human approval checkpoint is included before the email is sent. This creates a human-in-the-loop safety layer.
-Gmail Approved outreach is sent through Gmail.
-CRM Update The workflow updates the lead state after the outreach action. AI Components AI is used for tasks where contextual reasoning is useful. Examples include: Prospect analysis Lead scoring Qualification Personalized outreach generation Reasoning from prospect information The workflow then passes AI output into structured automation logic. Reliability The workflow architecture includes reliability mechanisms for external AI/API operations. HTTP Retry Handling External HTTP operations can use retry behavior to handle temporary failures. AI Fallback Handling The workflow includes fallback behavior for malformed AI responses. This prevents a single invalid AI response from automatically breaking the entire revenue workflow. Human-in-the-Loop AI-generated outreach is not sent immediately. The architecture includes: AI Generates Outreach ↓ Human Approval ↓ Send This provides an opportunity to review AI-generated communication before it reaches a prospect. Technology Stack Technology Purpose n8n Workflow orchestration Groq / LLM AI scoring and content generation Gmail Email delivery Webhooks Workflow triggers HTTP APIs External data and service integration CRM / Data Store Lead and workflow state Example Flow Input { "company_name": "Example Property Group", "industry": "Real Estate", "website": "https://example.com", "problem": "Slow lead follow-up", "service": "AI lead response automation" } Processing Validate ↓ Research ↓ AI Score ↓ Store ↓ Generate Personalized Outreach ↓ Human Approval ↓ Send Email ↓ Update Lead Result The system produces a structured lead assessment and personalized outreach that can be reviewed before delivery. Workflow Design Principles Modular Architecture The revenue system is divided into separate lanes so individual processes can be modified independently. AI + Deterministic Logic AI handles reasoning-heavy tasks while workflow logic controls predictable operations. Human Oversight A human approval stage is included before automated outreach is sent. Failure Handling External API and AI operations include retry/fallback considerations. State Tracking Workflow state is updated as leads progress through the revenue pipeline. Repository Structure ai-revenue-os/ │ ├── architecture/ │ └── overview.png │ ├── docs/ │ ├── architecture.md │ ├── modules.md │ └── setup.md │ ├── examples/ │ ├── sample-input.json │ └── sample-output.json │ ├── workflows/ │ └── ai-revenue-os-sanitized.json │ └── README.md Documentation Architecture Detailed technical architecture: docs/architecture.md Modules Detailed workflow/module breakdown: docs/modules.md Setup Import and configuration instructions: docs/setup.md Workflow Sanitized n8n workflow: workflows/ai-revenue-os-sanitized.json Examples Sample workflow input and output: examples/ Security This repository should contain only sanitized workflow definitions. Never commit: API keys OAuth tokens Passwords Production credentials Private CRM records Real prospect information Credentials should be configured through n8n's credential management system. All example data should be fictional. Project Status Status: Portfolio / Independent Engineering Project AI Revenue OS is an independently built automation project demonstrating practical AI automation and workflow engineering capabilities. It is not presented as client work. What This Project Demonstrates n8n workflow engineering AI/LLM integration Lead qualification Prospect research AI scoring Personalized outreach generation Human-in-the-loop automation Email automation Appointment workflows Revenue workflow design API integration Webhooks Error handling Retry/fallback strategies Modular automation architecture Business process automation Developer Mohammad Aqib AI Automation Developer focused on building AI-powered workflows, agents, and business automation systems. Core Focus n8n AI Agents LLMs APIs Webhooks CRM Automation Business Process Automation
+**Built with n8n · AI/LLMs · APIs · Webhooks · Gmail · CRM/Data Systems**
+
+AI Revenue OS is an end-to-end automation system designed to automate key stages of the revenue lifecycle — from lead intake and personalized outreach to appointment handling and revenue conversion.
+
+The system combines AI-powered decision making with deterministic business logic and human approval checkpoints to create practical, controllable automation rather than fully autonomous black-box workflows.
+
+---
+
+## Architecture
+
+![AI Revenue OS Architecture](architecture/overview.png)
+
+The system is organized into three independent automation lanes:
+
+**Lane 1 — Lead → Outreach**
+
+Research prospects, score leads, generate personalized outreach, obtain human approval, send the email, and update the CRM.
+
+**Lane 2 — Lead → Appointment**
+
+Process inbound leads, qualify conversations, handle appointment requests, book appointments, and update lead status.
+
+**Lane 3 — Appointment → Revenue**
+
+Generate proposals, apply controlled pricing logic, obtain approval, send proposals, handle customer decisions, and update revenue outcomes.
+
+> The three lanes are packaged in one n8n workflow file but are independently triggered by their own webhooks.
+
+---
+
+# What Problem It Solves
+
+Revenue teams often lose time between lead generation, qualification, outreach, scheduling, and follow-up.
+
+Common problems include:
+
+- Manual prospect research
+- Generic outreach
+- Slow lead qualification
+- Repetitive CRM updates
+- Manual appointment handling
+- Delayed proposal generation
+- Inconsistent follow-up
+- Lack of human control over AI-generated actions
+
+AI Revenue OS connects these stages into structured automation workflows.
+
+---
+
+# System Overview
+
+```text
+                    AI REVENUE OS
+                         │
+          ┌──────────────┼──────────────┐
+          │              │              │
+          ▼              ▼              ▼
+
+     LEAD → OUTREACH  LEAD → APPOINTMENT  APPOINTMENT → REVENUE
+
+     Research         Qualification       Proposal
+        ↓                  ↓                  ↓
+     AI Scoring       AI / Rules          Human Approval
+        ↓                  ↓                  ↓
+     Personalize       Appointment        Customer Decision
+        ↓                Handling              ↓
+     Human Approval       ↓               Won / Lost
+        ↓              CRM Update             ↓
+
+
+Lane 1 — Lead → Outreach
+Research · Score · Personalize · Approve · Send
+
+Workflow:
+
+Webhook
+   ↓
+Validate + Sanitize
+   ↓
+Research Prospect
+   ↓
+AI Lead Scoring
+   ↓
+Save Lead
+   ↓
+AI Personalized Outreach
+   ↓
+Human Approval
+   ↓
+Gmail
+   ↓
+Update CRM
+Key capabilities
+Lead input through webhook
+Input validation and sanitization
+Prospect research through external APIs
+AI-based lead scoring
+Personalized outreach generation
+Human approval before sending
+Gmail delivery
+CRM/activity update
+Reliability
+
+The workflow includes retry handling for external HTTP requests and a fallback for malformed AI scoring responses.
+
+Lane 2 — Lead → Appointment
+Qualify · Respond · Book · Update
+
+This lane processes inbound lead conversations and determines the appropriate next action.
+
+Workflow:
+
+Inbound Message
+      ↓
+Validate Input
+      ↓
+Find / Create Lead
+      ↓
+AI Qualification + Decision
+      ↓
+Parse + Validate
+      ↓
+ ┌───────────────┐
+ │               │
+ ▼               ▼
+Update CRM    AI Reply
+ │
+ ▼
+Interested?
+ │
+ ├── Yes → Book Appointment
+ │             ↓
+ │        Update Appointment
+ │
+ └── No → Schedule Follow-up
+Key capabilities
+Inbound webhook processing
+Lead lookup / creation
+AI qualification
+Structured AI decision output
+Automated response generation
+Interested-lead routing
+Appointment booking
+CRM updates
+Follow-up scheduling
+Lane 3 — Appointment → Revenue
+Proposal · Approval · Decision · Revenue
+
+Workflow:
+
+Proposal Webhook
+      ↓
+Get Lead + Requirements
+      ↓
+AI Proposal Generation
+      ↓
+Parse Proposal
+      ↓
+Save Proposal
+      ↓
+Human Approval
+      ↓
+Approved?
+      │
+      ├── No → Stop / Review
+      │
+      └── Yes
+            ↓
+        Send Proposal
+            ↓
+      Customer Decision
+            ↓
+       ┌────┴────┐
+       ▼         ▼
+    Accepted   Rejected
+       ↓         ↓
+    WON       LOST /
+    Revenue   Follow-up
+Important engineering decision
+
+AI does not control proposal pricing.
+
+The proposal content can be generated by AI, but pricing is controlled through deterministic business logic rather than blindly trusting an LLM-generated price.
+
+This reduces the risk of unintended pricing changes caused by AI output.
+
+AI Architecture
+
+AI is used where probabilistic reasoning provides value.
+
+AI responsibilities
+Prospect analysis
+Lead scoring
+Qualification
+Research interpretation
+Personalized outreach generation
+Conversational response generation
+Proposal content generation
+Deterministic responsibilities
+
+Business-critical logic remains controlled by workflow logic:
+
+Input validation
+Data sanitization
+Branching
+Approval gates
+CRM state changes
+Appointment state
+Pricing control
+Revenue status
+Error handling
+
+This creates a hybrid architecture:
+
+              AI
+       Reasoning / Generation
+                │
+                ▼
+        Deterministic Logic
+       Validation / Decisions
+                │
+                ▼
+         Human Approval
+                │
+                ▼
+          External Action
+Human-in-the-Loop
+
+The system intentionally avoids giving AI unrestricted control over business-critical actions.
+
+Human approval is used before important outbound actions such as:
+
+Sending personalized outreach
+Sending proposals
+Other revenue-impacting actions
+
+This allows AI to handle the repetitive reasoning while keeping final control with the operator.
+
+Reliability & Error Handling
+
+The workflows are designed with practical reliability mechanisms including:
+
+Input validation
+Data sanitization
+Structured AI outputs
+AI response parsing
+Fallback handling
+HTTP retry behavior
+Human approval checkpoints
+Controlled state updates
+CRM logging
+
+The goal is not simply to connect nodes together, but to make automation behavior predictable when external services or AI responses fail.
+
+Technology Stack
+Technology	Purpose
+n8n	Workflow orchestration
+Groq / LLMs	AI reasoning and generation
+Webhooks	Workflow triggers and integrations
+HTTP APIs	Research and external services
+Gmail	Email delivery
+CRM / Data Store	Lead and revenue state
+JavaScript	Validation, transformation and business logic
+Repository Structure
+ai-revenue-os/
+│
+├── README.md
+│
+├── architecture/
+│   └── overview.png
+│
+├── workflows/
+│   └── ai-revenue-os-sanitized.json
+│
+└── examples/
+    ├── sample-input.json
+    └── sample-output.json
+Workflow File
+
+The repository includes the sanitized n8n workflow:
+
+workflows/ai-revenue-os-sanitized.json
+
+The workflow contains the three AI Revenue OS lanes in a single n8n file.
+
+Credentials and runtime state are intentionally excluded from the public workflow file.
+
+Before deploying the workflow, users should configure their own credentials and environment-specific integrations.
+
+Example Input / Output
+
+Example webhook inputs and representative outputs are available in:
+
+examples/sample-input.json
+examples/sample-output.json
+
+These examples demonstrate the type of structured data processed by the system without exposing real customer information or credentials.
+
+Security
+
+No production credentials should be committed to this repository.
+
+The public workflow has been sanitized to remove credential bindings and runtime/test state.
+
+When deploying the workflow:
+
+Use environment-specific credentials
+Never hard-code API keys
+Never commit passwords or access tokens
+Use n8n credential management
+Replace example data with production data
+Review webhook authentication before deployment
+Project Status
+
+Status: Portfolio / Independent Project
+
+This project was designed and built as an independent AI automation system to demonstrate practical capabilities in:
+
+n8n workflow development
+AI automation
+LLM integration
+API integration
+Webhook architecture
+Business process automation
+CRM workflows
+Human-in-the-loop systems
+Reliability engineering
+Revenue workflow automation
+What This Project Demonstrates
+
+This project demonstrates the ability to design automation beyond simple AI prompts.
+
+It combines:
+
+AI + APIs + business logic + workflow orchestration + human approval + external actions + state management
+
+into a single revenue-oriented automation system.
+     Gmail                                     
+        ↓                                   Revenue
+     CRM Update                              Tracking
