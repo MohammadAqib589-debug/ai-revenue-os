@@ -1,0 +1,22 @@
+{
+  "lane_1_lead_outreach": {
+    "company_name": "Harbour Property Group",
+    "industry": "Real Estate",
+    "website": "https://example.com",
+    "contact_name": "Sarah Mitchell",
+    "email": "sarah@example.com",
+    "problem": "Manual lead follow-up and inconsistent prospect research",
+    "service": "AI-powered lead research and personalized outreach"
+  },
+  "lane_2_lead_appointment": {
+    "name": "Sarah Mitchell",
+    "email": "sarah@example.com",
+    "message": "I'm interested in booking a consultation next week.",
+    "lead_id": "example-lead-001"
+  },
+  "lane_3_appointment_revenue": {
+    "lead_id": "example-lead-001",
+    "appointment_id": "example-appointment-001",
+    "requirements": "AI automation consultation for lead follow-up and outreach"
+  }
+}
